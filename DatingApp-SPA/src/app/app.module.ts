@@ -15,6 +15,12 @@ import { MemberCardComponent } from './members/member-card/member-card.component
 import { ListComponent } from './list/list.component';
 import { MessagesComponent } from './messages/messages.component';
 import { appRoutes } from './routes';
+import { JwtModule } from '@auth0/angular-jwt';
+import { config } from 'rxjs';
+
+export function tokeGetter() {
+   return localStorage.getItem('token');
+}
 
 @NgModule({
    declarations: [
@@ -32,7 +38,15 @@ import { appRoutes } from './routes';
       HttpClientModule,
       FormsModule,
       BsDropdownModule.forRoot(),
-      RouterModule.forRoot(appRoutes)
+      RouterModule.forRoot(appRoutes),
+      JwtModule.forRoot( {
+         config: {
+            tokenGetter: tokeGetter,
+            whitelistedDomains: ['localhost:5000'],
+            blacklistedRoutes: ['localhost:5000/auth']
+         }
+      }
+      )
    ],
    providers: [
       AuthService
